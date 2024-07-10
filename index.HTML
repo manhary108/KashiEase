@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel and Hospitality Preferences</title>
+    <style>
+        body {
+            background-image: url('path_to_iim_kashipur_photo.jpg'); /* Add the path to your image */
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, select {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            width: 100%;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #28a745;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Travel and Hospitality Preferences</h1>
+        <form id="preferencesForm">
+            <!-- Preferences will be added here -->
+            <div id="preferencesContainer"></div>
+            <p>Total Cost: <span id="totalCost">0</span> INR</p>
+            <button type="button" onclick="generateQRCode()">Generate QR Code</button>
+        </form>
+        <div id="qrCodeContainer"></div>
+        <button type="button" onclick="confirmPayment()">Confirm Payment</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script>
+        const preferences = [
+            { name: 'Accommodation', options: [{ type: 'Single Room', cost: 2000 }, { type: 'Double Room', cost: 3000 }] },
+            { name: 'Transport', options: [{ type: 'Bus', cost: 500 }, { type: 'Car', cost: 1500 }] },
+        ];
+
+        function loadPreferences() {
+            const container = document.getElementById('preferencesContainer');
+            preferences.forEach(pref => {
+                const div = document.createElement('div');
+                div.innerHTML = `<label>${pref.name}</label>
+                                <select onchange="calculateTotal()">
+                                    ${pref.options.map(opt => `<option value="${opt.cost}">${opt.type} - ${opt.cost} INR</option>`).join('')}
+                                </select>`;
+                container.appendChild(div);
+            });
+        }
+
+        function calculateTotal() {
+            const selects = document.querySelectorAll('#preferencesContainer select');
+            let total = 0;
+            selects.forEach(select => {
+                total += parseInt(select.value);
+            });
+            document.getElementById('totalCost').innerText = total;
+        }
+
+        function generateQRCode() {
+            const totalCost = document.getElementById('totalCost').innerText;
+            const qr = new QRious({
+                element: document.getElementById('qrCodeContainer'),
+                value: `upi://pay?pa=YOUR_UPI_ID&pn=YOUR_NAME&am=${totalCost}&cu=INR`,
+                size: 200
+            });
+        }
+
+        function confirmPayment() {
+            // Placeholder for confirming payment logic and updating Google Form
+            alert('Payment confirmed and Google Form updated.');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPreferences);
+    </script>
+</body>
+</html>
+
+
